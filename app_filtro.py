@@ -107,7 +107,7 @@ if archivo_audio is not None:
     S_db_filtrado_reducido, _ = reducir_espectrograma(S_db_filtrado)
 
     # Graficar
-    fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+    fig, ax = plt.subplots(1, 2, figsize=(11, 5))
 
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
