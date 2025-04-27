@@ -67,7 +67,7 @@ st.write("Sube un archivo de audio y ajusta el porcentaje de filtro.")
 
 # Parámetros
 sr = 6000
-n_fft = 5000
+n_fft = 4000
 hop_length = 40
 duracion_maxima = 30  # segundos
 
@@ -99,12 +99,12 @@ if archivo_audio is not None:
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
     ax[0].set_title('🎧 Espectrograma Original')
-    ax[0].set_ylim(100, 3000)
+    ax[0].set_ylim(80, 2200)
 
     librosa.display.specshow(S_db_filtrado_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[1], cmap='gray_r')
     ax[1].set_title('🔇 Espectrograma Filtrado')
-    ax[1].set_ylim(100, 3000)
+    ax[1].set_ylim(80, 2200)
 
     plt.tight_layout()
     st.pyplot(fig)
