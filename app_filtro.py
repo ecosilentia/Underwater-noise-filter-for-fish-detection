@@ -43,7 +43,7 @@ def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro
 
     # Aplicar filtro controlado
     if pred >= 0.5:
-        umbral = -20 + ((-100 + 20) * (porcentaje_filtro / 10))
+        umbral = -40 + ((-100 + 40) * (porcentaje_filtro / 10))
         S_db_filtrado = np.where(S_db > umbral, -100, S_db)
     else:
         S_db_filtrado = S_db
@@ -68,7 +68,7 @@ st.write("Sube un archivo de audio y ajusta el porcentaje de filtro.")
 # Parámetros
 sr = 6000
 n_fft = 2000
-hop_length = 80
+hop_length = 100
 duracion_maxima = 45  # segundos
 
 # Cargar modelo
@@ -99,12 +99,12 @@ if archivo_audio is not None:
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
     ax[0].set_title('🎧 Espectrograma Original')
-    ax[0].set_ylim(80, 2200)
+    ax[0].set_ylim(90, 2600)
 
     librosa.display.specshow(S_db_filtrado_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[1], cmap='gray_r')
     ax[1].set_title('🔇 Espectrograma Filtrado')
-    ax[1].set_ylim(80, 2200)
+    ax[1].set_ylim(90, 2600)
 
     plt.tight_layout()
     st.pyplot(fig)
