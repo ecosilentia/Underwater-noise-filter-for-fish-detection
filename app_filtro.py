@@ -64,7 +64,7 @@ def reducir_espectrograma(S_db, max_cols=1000):
 # INICIO DE LA APP
 # -------------------------
 
-st.title("🎛️ Filtro Inteligente de Ruido Submarino")
+st.title("🎛️ Filtro de Ruido Submarino para detección de peces")
 st.write("""
 Sube un archivo de audio y ajusta los parámetros del filtro:
 
