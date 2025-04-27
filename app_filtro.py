@@ -15,7 +15,7 @@ def cargar_modelo(ruta_modelo):
     return modelo
 
 # Función para procesar audio
-def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro, max_duracion=60):
+def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro, umbral_manual, max_duracion=60):
     # Cargar audio
     audio, sr_real = librosa.load(file_buffer, sr=sr)
 
@@ -43,8 +43,10 @@ def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro
 
     # Aplicar filtro controlado
     if pred >= 0.5:
-        umbral = -25 + ((-60 + 25) * (porcentaje_filtro / 10))
-        S_db_filtrado = np.where(S_db > umbral, -60, S_db)
+        # Calcula umbral dinámico basado en porcentaje, luego suma umbral manual
+        umbral_auto = -35 + ((-80 + 35) * (porcentaje_filtro / 10))
+        umbral_final = umbral_auto + umbral_manual
+        S_db_filtrado = np.where(S_db > umbral_final, -80, S_db)
     else:
         S_db_filtrado = S_db
 
@@ -63,26 +65,37 @@ def reducir_espectrograma(S_db, max_cols=1000):
 # -------------------------
 
 st.title("🎛️ Filtro Inteligente de Ruido Submarino")
-st.write("Sube un archivo de audio y ajusta el porcentaje de filtro.")
+st.write("""
+Sube un archivo de audio y ajusta los parámetros del filtro:
 
-# Parámetros
+- **Porcentaje de Filtro:** Controla qué tan agresivo es el filtrado.
+- **Ajuste de Umbral (dB):** Modifica manualmente el nivel de corte del espectrograma.
+- **Hop Length:** Distancia entre ventanas de análisis (más pequeño = mejor resolución temporal).
+- **n_fft:** Tamaño de la ventana FFT (más grande = mejor resolución frecuencial).
+""")
+
+# Parámetros básicos
 sr = 6000
-n_fft = 2000
-hop_length = 100
-duracion_maxima = 45  # segundos
+duracion_maxima = 60  # segundos
 
 # Cargar modelo
 ruta_modelo = "modelo_filtro_ruido.keras"  # Ajusta esta ruta si es necesario
 modelo = cargar_modelo(ruta_modelo)
 
-# Slider para porcentaje de filtro
-porcentaje_filtro = st.slider('🔧 Porcentaje de filtro', 0, 10, 5)
+# Sidebar para controles avanzados
+st.sidebar.header("🔧 Parámetros de Procesamiento")
+
+porcentaje_filtro = st.sidebar.slider('Porcentaje de Filtro', 0, 10, 5)
+umbral_manual = st.sidebar.slider('Ajuste de Umbral (dB)', -20, 20, 0)
+hop_length = st.sidebar.slider('Hop Length (n° de muestras)', 10, 200, 40, step=5)
+n_fft = st.sidebar.slider('n_fft (tamaño de ventana)', 512, 8192, 6000, step=512)
 
 # Subir archivo
-archivo_audio = st.file_uploader("Sube tu archivo WAV", type=["wav"])
+archivo_audio = st.file_uploader("🎵 Sube tu archivo WAV", type=["wav"])
 
 if archivo_audio is not None:
-    pred, S_db, S_db_filtrado, recortado = procesar_audio(archivo_audio, sr, n_fft, hop_length, modelo, porcentaje_filtro, max_duracion=duracion_maxima)
+    pred, S_db, S_db_filtrado, recortado = procesar_audio(
+        archivo_audio, sr, n_fft, hop_length, modelo, porcentaje_filtro, umbral_manual, max_duracion=duracion_maxima)
 
     st.write(f"🎯 Predicción de Ruido (0=silencio, 1=ruido): **{pred:.3f}**")
     
@@ -99,13 +112,12 @@ if archivo_audio is not None:
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
     ax[0].set_title('🎧 Espectrograma Original')
-    ax[0].set_ylim(90, 2600)
+    ax[0].set_ylim(140, 2300)
 
     librosa.display.specshow(S_db_filtrado_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[1], cmap='gray_r')
     ax[1].set_title('🔇 Espectrograma Filtrado')
-    ax[1].set_ylim(90, 2600)
+    ax[1].set_ylim(140, 2300)
 
     plt.tight_layout()
     st.pyplot(fig)
-
