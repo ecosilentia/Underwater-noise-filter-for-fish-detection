@@ -112,12 +112,12 @@ if archivo_audio is not None:
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
     ax[0].set_title('🎧 Espectrograma Original')
-    ax[0].set_ylim(100, 6000)
+    ax[0].set_ylim(95, 2500)
 
     librosa.display.specshow(S_db_filtrado_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[1], cmap='gray_r')
     ax[1].set_title('🔇 Espectrograma Filtrado')
-    ax[1].set_ylim(100, 6000)
+    ax[1].set_ylim(95, 2500)
 
     plt.tight_layout()
     st.pyplot(fig)
