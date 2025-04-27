@@ -86,7 +86,7 @@ modelo = cargar_modelo(ruta_modelo)
 st.sidebar.header("🔧 Parámetros de Procesamiento")
 
 porcentaje_filtro = st.sidebar.slider('Porcentaje de Filtro', 0, 10, 5)
-umbral_manual = st.sidebar.slider('Ajuste de Umbral (dB)', -30, 30, 0)
+umbral_manual = st.sidebar.slider('Ajuste de Umbral (dB)', -0, 60, 0)
 hop_length = st.sidebar.slider('Hop Length (n° de muestras)', 10, 200, 40, step=5)
 n_fft = st.sidebar.slider('n_fft (tamaño de ventana)', 512, 8192, 6000, step=512)
 
@@ -107,7 +107,7 @@ if archivo_audio is not None:
     S_db_filtrado_reducido, _ = reducir_espectrograma(S_db_filtrado)
 
     # Graficar
-    fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
 
     librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
