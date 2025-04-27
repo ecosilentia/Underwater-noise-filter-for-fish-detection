@@ -43,7 +43,7 @@ def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro
 
     # Aplicar filtro controlado
     if pred >= 0.5:
-        umbral = -25 + ((-80 + 25) * (porcentaje_filtro / 10))
+        umbral = -45 + ((-60 + 45) * (porcentaje_filtro / 10))
         S_db_filtrado = np.where(S_db > umbral, -80, S_db)
     else:
         S_db_filtrado = S_db
@@ -69,7 +69,7 @@ st.write("Sube un archivo de audio y ajusta el porcentaje de filtro.")
 sr = 6000
 n_fft = 2000
 hop_length = 80
-duracion_maxima = 30  # segundos
+duracion_maxima = 45  # segundos
 
 # Cargar modelo
 ruta_modelo = "modelo_filtro_ruido.keras"  # Ajusta esta ruta si es necesario
