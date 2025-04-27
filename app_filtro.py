@@ -76,7 +76,7 @@ Sube un archivo de audio y ajusta los parámetros del filtro:
 
 # Parámetros básicos
 sr = 6000
-duracion_maxima = 45  # segundos
+duracion_maxima = 40  # segundos
 
 # Cargar modelo
 ruta_modelo = "modelo_filtro_ruido.keras"  # Ajusta esta ruta si es necesario
