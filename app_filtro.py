@@ -53,7 +53,7 @@ st.write("Sube un archivo de audio y ajusta el porcentaje de filtro.")
 # Parámetros
 sr = 6000
 n_fft = 6000
-hop_length = 40
+hop_length = 50
 
 # Cargar modelo
 ruta_modelo = "modelo_filtro_ruido.keras"  # Ajusta esta ruta si es necesario
@@ -70,18 +70,28 @@ if archivo_audio is not None:
 
     st.write(f"🎯 Predicción de Ruido (0=silencio, 1=ruido): **{pred:.3f}**")
 
+    # 🛠️ REDUCIR tamaño del espectrograma para graficar
+    def reducir_espectrograma(S_db, factor=4):
+        # Submuestrea en el eje del tiempo (columna)
+        return S_db[:, ::factor]
+
+    factor_reduccion = 4  # Puedes ajustar este número: 2, 4, 5, 10 según tamaño del audio
+    S_db_reducido = reducir_espectrograma(S_db, factor=factor_reduccion)
+    S_db_filtrado_reducido = reducir_espectrograma(S_db_filtrado, factor=factor_reduccion)
+
     # Graficar
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
 
-    librosa.display.specshow(S_db, sr=sr, hop_length=hop_length,
+    librosa.display.specshow(S_db_reducido, sr=sr, hop_length=hop_length*factor_reduccion,
                              x_axis='time', y_axis='log', ax=ax[0], cmap='gray_r')
     ax[0].set_title('🎧 Espectrograma Original')
-    ax[0].set_ylim(140, 2300)
+    ax[0].set_ylim(100, 2500)
 
-    librosa.display.specshow(S_db_filtrado, sr=sr, hop_length=hop_length,
+    librosa.display.specshow(S_db_filtrado_reducido, sr=sr, hop_length=hop_length*factor_reduccion,
                              x_axis='time', y_axis='log', ax=ax[1], cmap='gray_r')
     ax[1].set_title('🔇 Espectrograma Filtrado')
-    ax[1].set_ylim(140, 2300)
+    ax[1].set_ylim(100, 2500)
 
     plt.tight_layout()
     st.pyplot(fig)
+
