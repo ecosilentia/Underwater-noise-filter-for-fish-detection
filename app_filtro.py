@@ -44,7 +44,7 @@ def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro
     # Aplicar filtro controlado
     if pred >= 0.5:
         # Calcula umbral dinámico basado en porcentaje, luego suma umbral manual
-        umbral_auto = -35 + ((-80 + 35) * (porcentaje_filtro / 10))
+        umbral_auto = -45 + ((-80 + 45) * (porcentaje_filtro / 10))
         umbral_final = umbral_auto + umbral_manual
         S_db_filtrado = np.where(S_db > umbral_final, -80, S_db)
     else:
