@@ -43,8 +43,8 @@ def procesar_audio(file_buffer, sr, n_fft, hop_length, modelo, porcentaje_filtro
 
     # Aplicar filtro controlado
     if pred >= 0.5:
-        umbral = -45 + ((-100 + 45) * (porcentaje_filtro / 10))
-        S_db_filtrado = np.where(S_db > umbral, -80, S_db)
+        umbral = -20 + ((-100 + 20) * (porcentaje_filtro / 10))
+        S_db_filtrado = np.where(S_db > umbral, -100, S_db)
     else:
         S_db_filtrado = S_db
 
