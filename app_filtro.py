@@ -66,7 +66,7 @@ def reducir_espectrograma(S_db, max_cols=1000):
 
 st.title("🎛️ Filtro de Ruido Submarino para detección de peces")
 st.write("""
-Sube un archivo de audio y ajusta los parámetros del filtro:
+Sube un archivo de audio en formato wav y ajusta los parámetros del filtro para observar el espectrograma entre 100 y 2500 Hz:
 
 - **Porcentaje de Filtro:** Controla qué tan agresivo es el filtrado.
 - **Ajuste de Umbral (dB):** Modifica manualmente el nivel de corte del espectrograma.
