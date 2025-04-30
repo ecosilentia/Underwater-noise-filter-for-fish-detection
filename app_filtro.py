@@ -87,8 +87,8 @@ st.sidebar.header("🔧 Parámetros de Procesamiento")
 
 porcentaje_filtro = st.sidebar.slider('Porcentaje de Filtro', 0, 10, 5)
 umbral_manual = st.sidebar.slider('Ajuste de Umbral (dB)', -0, 40, 20)
-hop_length = st.sidebar.slider('Hop Length (n° de muestras)', 10, 200, 40, step=5)
-n_fft = st.sidebar.slider('n_fft (tamaño de ventana)', 512, 8192, 6000, step=512)
+hop_length = st.sidebar.slider('Hop Length (n° de muestras)', 10, 200, 180, step=5)
+n_fft = st.sidebar.slider('n_fft (tamaño de ventana)', 512, 8192, 2048, step=512)
 
 # Subir archivo
 archivo_audio = st.file_uploader("🎵 Sube tu archivo WAV", type=["wav"])
